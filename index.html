@@ -154,6 +154,11 @@ button.light { background: #eee8dc; color: #292722; }
   const hasBanglaOrLatin = s => /[\u0980-\u09FFA-Za-z]/.test(s);
   const arabicOnly = s => hasArabic(s) && !hasBanglaOrLatin(s);
 
+  // Escape করা ব্র্যাকেট স্বয়ংক্রিয়ভাবে ঠিক করা
+  function fixBrackets(s) {
+    return s.replace(/\\([\[\]])/g, "$1");
+  }
+
   function escapeHTML(s) {
     return s.replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
@@ -178,7 +183,11 @@ button.light { background: #eee8dc; color: #292722; }
   }
 
   function formatText() {
-    const input = $("source").value.replace(/\r\n?/g, "\n");
+    // প্রথমেই ব্র্যাকেট ঠিক করা হচ্ছে
+    const input = fixBrackets(
+      $("source").value.replace(/\r\n?/g, "\n")
+    );
+
     const lines = input.split("\n");
     const blocks = [];
     let paragraph = [];
@@ -302,4 +311,3 @@ button.light { background: #eee8dc; color: #292722; }
 </script>
 </body>
 </html>
-
